@@ -2,7 +2,7 @@ System architecture
 ====================
 ![LabKey system architecture](labkey_system_diagram.png)
 
-This toolkit is built on the [LabKey data platform](https://www.labkey.org), an open-source data management platform designed for biological data, and uses a [PostgreSQL](http://www.postgresql.org/) database designed for capture of metadata useful for disease outbreak investigations. The toolkit also employs [D3.js](http://d3js.org/), [R](http://www.r-project.org/), and open-source MITRE geospatial tools. 
+This platform is built on the [LabKey data platform](https://www.labkey.org), an open-source data management platform designed for biological data, and uses a [PostgreSQL](http://www.postgresql.org/) database designed for capture of metadata useful for disease outbreak investigations. The platform also employs [D3.js](http://d3js.org/), [R](http://www.r-project.org/), and open-source MITRE geospatial tools. 
 
 Here, we provide a Java program that parses xml files from NCBI describing data from the [BioSample](http://www.ncbi.nlm.nih.gov/biosample) and [BioProject](http://www.ncbi.nlm.nih.gov/bioproject/) databases. We also provide a LabKey module that, when placed into LabKey's `External Modules` folder will allow projects to be created that enable a user to interact with SRA data from within LabKey.
 
