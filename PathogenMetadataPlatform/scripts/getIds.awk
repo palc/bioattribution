@@ -15,7 +15,8 @@ BEGIN{
           if(testid==""){
              print id;
           } else{
-             print NR":"$0 >> scriptpath"/deletedIDs.txt";
+             print NR":"$0 >> (scriptpath"/deletedIDs.txt");
+             close((scriptpath"/deletedIDs.txt"));
           }
           findBioSample=1;
        }

@@ -8,11 +8,11 @@ rm ${scriptpath}/filter.awk
 rm ${idMapDir}/PRJNA_*.out
 grep '<ArchiveID accession="PRJNA' ${bioprojectfilepath}/bioproject.xml > ${idMapDir}/PRJNA_ID.out
 awk -F "\"" '{print $6;}' ${idMapDir}/PRJNA_ID.out > ${idMapDir}/PRJNA_parsedID.out
-python ${scriptpath}/mapBioSampleBioProjectIDs.py "\"${idMapDir}\""
+python ${scriptpath}/mapBioSampleBioProjectIDs.py "\"${idMapDir}/\""
 
 # Remove BioSample IDs that are not associated with BioProject IDs
 awk -v scriptpath="\"${scriptpath}\"" -f ${scriptpath}/getIds.awk ${biosamplefilepath}/biosample_set.xml > ${scriptpath}/idlist.out
-python ${scriptpath}/getBioSampleID.py "\"${idMapDir}\"" "\"${scriptpath}\""
+python ${scriptpath}/getBioSampleID.py "\"${idMapDir}/\"" "\"${scriptpath}/\""
 sort -nu ${scriptpath}/BioSampleIDs.out > ${scriptpath}/sorted_BioSampleIDs.out
 sort -nu ${scriptpath}/idlist.out > ${scriptpath}/sorted_idlist.out
 diff ${scriptpath}/sorted_BioSampleIDs.out ${scriptpath}/sorted_idlist.out > ${scriptpath}/diff_IDs.out
