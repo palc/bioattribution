@@ -144,8 +144,6 @@ II. After these paths have been configured, and the java code has been compiled,
 Note: The data from NCBI may change over time.  One particular area where this can be problematic is in the DataSplit.sh script.  If there are too many items specified in an XML file, the Java code may have an OutOfMemoryError.  The current distribution has maxRecords set to "1000" for BioSample and "2000" for BioProject.  If an OutOfMemoryError is observed, the maxRecords value should be decreased.  A recent run for the BioSampleSet generated over 4000 files.  If maxRecords were 500, then there would be 8000 files generated on a similar run.
 awk -v filePrefix="${biosamplefilepath}/FtpBioSample" -v openingTag="<BioSampleSet>" -v closingTag="</BioSampleSet>" -v beginTag1="<BioSample>" -v beginTag2="<BioSample " -v endTag="</BioSample>" -v maxRecords="1000" -f ${scriptpath}/split_xml.awk ${biosamplefilepath}/biosample_set.xml
 
-
-
 Connecting LabKey to Postgres
 -----------------------------
 The LabKey project provides [instructions](https://www.labkey.org/wiki/home/Documentation/page.view?name=externalPostgresql&_docid=wiki%3A97d16462-c1dc-102e-bae9-987439a6cbac) that will allow you to connect LabKey to the PostgreSQL database that is generated with the provided Java program.  	
