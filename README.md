@@ -172,4 +172,6 @@ and
 
 Replace `<DATABASE_NAME>` with the name of your scheme, which defaults to `bioatt`.
 
+In order to install the LabKey module, move the `datatools` directory to the `externalModules` folder of your labkey installation. For example, if LabKey is installed at `/usr/local/labkey`, `datatools` would be located at `/usr/local/labkey/externalModules/labkey`.
+
 ©2015 The MITRE Corporation. ALL RIGHTS RESERVED. Approved for Public Release; Distribution Unlimited. Case Number 15-0792.
