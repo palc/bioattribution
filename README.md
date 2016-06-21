@@ -154,7 +154,7 @@ LabKey Module
 -------------
 We provide a LabKey module that is designed to work with the database generated with the provided java program. For more on modules please refer to the LabKey [documentation](https://www.labkey.org/wiki/home/Documentation/page.view?name=moduleqvr).
 
-Within the labkey module, located at `DataTools`, there are two webpart html files in `views`. These files, called `geodata.html` and `metadata.html`. Within these files, there are two code snippets that will need to be modified to work with the name of the schema of your database: 
+Within the labkey module, located at `datatools`, there are two webpart html files in `views`. These files, called `geodata.html` and `metadata.html`. Within these files, there are two code snippets that will need to be modified to work with the name of the schema of your database: 
 
 		_qwp1 = new LABKEY.QueryWebPart({renderTo       : "grid",
                 						 title          : "SRA Search",
