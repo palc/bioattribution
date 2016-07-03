@@ -125,7 +125,7 @@ public class BioSampleParser {
             NodeList lNodeList = lRootElement.getElementsByTagName("BioSample");
             StringBuffer lBuffer = new StringBuffer();
             if(lNodeList != null && lNodeList.getLength() > 0) {
-                for(int i = 0 ; i < lNodeList.getLength();i++) {
+                for(int i = 0, n = lNodeList.getLength(); i < n; i++) {
                     Element lBiosampleElement = (Element)lNodeList.item(i);
                     lBuffer.append(mySample_Table.parseBioSampleXML(lBiosampleElement));
                     lBuffer.append(myHuman_Host_Table.parseBioSampleXML(lBiosampleElement));
@@ -156,7 +156,7 @@ public class BioSampleParser {
             NodeList lNodeList = lRootElement.getElementsByTagName("Package");
             StringBuffer lBuffer = new StringBuffer();
             if(lNodeList != null && lNodeList.getLength() > 0) {
-                for(int i = 0 ; i < lNodeList.getLength();i++) {
+                for(int i = 0, n = lNodeList.getLength(); i < n;i++) {
                     System.out.println("Parsing Node "+i);
                     Element lPackageElement = (Element)lNodeList.item(i);
                     lBuffer.append(myProject_Table.parseBioProjectXML(lPackageElement));
