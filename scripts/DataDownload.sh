@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -eux -o pipefail
 . config.properties
 
 # Download BioSample XML

@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -eux -o pipefail
+
 . config.properties
 rm ${idMapDir}/*appedIDs.out
 rm ${scriptpath}/filter.awk

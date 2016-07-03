@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -eux -o pipefail
+
 . config.properties
 export CLASSPATH=$CLASSPATH:${javapath}:${javapath}/postgresql-9.1-902.jdbc4.jar:${javapath}/xom-1.2.8.jar
 

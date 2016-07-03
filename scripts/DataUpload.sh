@@ -1,4 +1,5 @@
-#!/bin/bash -x
+#!/usr/bin/env bash
+set -eux -o pipefail
 date
 # Download XML
 ./DataDownload.sh
