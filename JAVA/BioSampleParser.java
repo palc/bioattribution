@@ -4,17 +4,24 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+//import javax.xml.parsers.DocumentBuilder;
+//import javax.xml.parsers.DocumentBuilderFactory;
+//import javax.xml.parsers.ParserConfigurationException;
+//import org.w3c.dom.Document;
+//import org.w3c.dom.Element;
+//import org.w3c.dom.NodeList;
+// import org.xml.sax.SAXException;
 import java.util.Hashtable;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Properties;
+
+import javax.xml.stream.*;
+import javax.xml.transform.*;
+import javax.xml.transform.stax.StAXSource;
+import javax.xml.transform.dom.DOMResult;
+import org.w3c.dom.*
+
 
 /**
  * 
@@ -118,14 +125,14 @@ public class BioSampleParser {
     /**
      * Pulls items out of the XML document.
      */
-    private void parseBioSampleDebug(){
+    private void parseBioSampleDebug() {
         //get the root element
         if(myDocument != null) {
             Element lRootElement = myDocument.getDocumentElement();
             NodeList lNodeList = lRootElement.getElementsByTagName("BioSample");
             StringBuffer lBuffer = new StringBuffer();
             if(lNodeList != null && lNodeList.getLength() > 0) {
-                for(int i = 0 ; i < lNodeList.getLength();i++) {
+                for(int i = 0, n = lNodeList.getLength() ; i < n; i++) {
                     Element lBiosampleElement = (Element)lNodeList.item(i);
                     lBuffer.append(mySample_Table.parseBioSampleXML(lBiosampleElement));
                     lBuffer.append(myHuman_Host_Table.parseBioSampleXML(lBiosampleElement));
@@ -156,7 +163,7 @@ public class BioSampleParser {
             NodeList lNodeList = lRootElement.getElementsByTagName("Package");
             StringBuffer lBuffer = new StringBuffer();
             if(lNodeList != null && lNodeList.getLength() > 0) {
-                for(int i = 0 ; i < lNodeList.getLength();i++) {
+                for(int i = 0, n = lNodeList.getLength(); i < n; i++) {
                     System.out.println("Parsing Node "+i);
                     Element lPackageElement = (Element)lNodeList.item(i);
                     lBuffer.append(myProject_Table.parseBioProjectXML(lPackageElement));
@@ -445,6 +452,8 @@ public class BioSampleParser {
                 BioSampleParser lParser = new BioSampleParser(lGeoMapper,lProp);
                 lParser.connectToDatabase();
                 lParser.deleteTables();
+                System.out.println("Number of biosample files: " + Integer.toString(lNumOfBioSampleFiles));
+                System.out.println("Number of bioproject files: " + Integer.toString(lNumOfBioProjectFiles));
                 for(int i=0;i<lNumOfBioSampleFiles;i++) {
                     String lFileName = lBioSampleFileName +i+".xml";
                     System.out.println("Parsing "+lFileName);
