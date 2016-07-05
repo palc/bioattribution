@@ -1,2 +1,4 @@
 *.out
 *.class
+config.properties
+config.properites.bak
