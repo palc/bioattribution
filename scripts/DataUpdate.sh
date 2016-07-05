@@ -11,6 +11,4 @@ countbiosamples=`ls -1 ${biosamplefilepath}/ | egrep "FtpBioSample" | wc -l`
 countbioprojects=`ls -1 ${bioprojectfilepath}/ | egrep "FtpBioProject" | wc -l` 
 java -cp ${javapath}:${javapath}/postgresql-9.1-902.jdbc4.jar:${javapath}/xom-1.2.8.jar biosampleparser.BioSampleParser loadnewdata ${countbiosamples} "${biosamplefilepath}/FtpBioSample" ${countbioprojects} "${bioprojectfilepath}/FtpBioProject" "${idMapDir}/FilteredMappedIDs.out" "${scriptpath}/geomap.tsv" ${scriptpath}/config.properties >& ${javapath}/error.out
 
-mv ${scriptpath}/nohup.out ${scriptpath}/nohup.txt
-rm ${scriptpath}/*.out
-
+rm -f ${scriptpath}/*.out
