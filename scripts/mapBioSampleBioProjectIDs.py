@@ -49,21 +49,3 @@ for id_batch in batch(xmlIndex, 200):
             print "Ignoring " + BioProjectID
 outfile.close()
 biosample_out.close()
-
-# for index in xmlIndex:
-#         BioProjectID = index.strip()
-#         os.system("wget -q -O "+ path +"BioProject" + BioProjectID + ".xml " + base_url + BioProjectID + """" """)
-
-#         XMLfile = path + "BioProject" + BioProjectID + ".xml"
-#         if os.path.isfile(XMLfile) == True:
-#             try:
-#                 dom = xml.dom.minidom.parse(XMLfile)
-#                 Link = dom.getElementsByTagName('Link')
-#                 k = 0
-#                 for k in range(0, len(Link)):
-#                         Id = Link[k].getElementsByTagName('Id')[0].firstChild.nodeValue
-#                         MappedIDs = "BioProject" + BioProjectID + "\tBioSample" + str(Id) + "\n"
-#                         outfile.write(MappedIDs)
-#             except ExpatError:
-#                 print "Ignoring "+BioProjectID
-# outfile.close()

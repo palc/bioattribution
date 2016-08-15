@@ -1,36 +1,27 @@
 package biosampleparser;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 import java.util.Hashtable;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.Properties;
-import java.io.FileInputStream;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamReader;
-import javax.xml.stream.XMLStreamConstants;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import javax.xml.transform.stax.StAXSource;
-import javax.xml.transform.dom.DOMResult;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.stream.XMLStreamException;
-import java.io.FileNotFoundException;
-
 
 /**
  * 
  * @author WCHANG
  */
 public class BioSampleParser {
+    private Document myDocument;
     private Properties myProperties;
     
     // What follows is a list of tables which are defined in BioAttributionDB
@@ -101,103 +92,84 @@ public class BioSampleParser {
         myProperties = prop;
     }
 
+     /**
+     * Loads the XML File into the DOM.
+     */
+    private void parseXmlFile(String filename){
+        //get the factory
+        DocumentBuilderFactory lDocumentBuilderFactory = DocumentBuilderFactory.newInstance();
+
+        try {
+            //Using factory get an instance of document builder
+            DocumentBuilder lDocumentBuilder = lDocumentBuilderFactory.newDocumentBuilder();
+            myDocument=lDocumentBuilder.parse(filename);
+        }catch(  ParserConfigurationException pce) {
+            myDocument = null;
+            pce.printStackTrace();
+        }catch (SAXException se) {
+            myDocument = null;
+            se.printStackTrace();
+        }catch (IOException ioe) {
+            myDocument = null;
+            ioe.printStackTrace();
+        }
+    }
+
     /**
      * Pulls items out of the XML document.
      */
-    private void parseBioSampleDebug(String fileName) {
-        String BIOSAMPLE_ELEMENT = "BioSample";
-        FileInputStream fis;
-        XMLStreamReader xsr;
-        StringBuffer lBuffer = new StringBuffer();
-        DOMResult result;
+    private void parseBioSampleDebug(){
+        //get the root element
+        if(myDocument != null) {
+            Element lRootElement = myDocument.getDocumentElement();
+            NodeList lNodeList = lRootElement.getElementsByTagName("BioSample");
+            StringBuffer lBuffer = new StringBuffer();
+            if(lNodeList != null && lNodeList.getLength() > 0) {
+                for(int i = 0, n = lNodeList.getLength(); i < n; i++) {
+                    Element lBiosampleElement = (Element)lNodeList.item(i);
+                    lBuffer.append(mySample_Table.parseBioSampleXML(lBiosampleElement));
+                    lBuffer.append(myHuman_Host_Table.parseBioSampleXML(lBiosampleElement));
+                    lBuffer.append(myNon_Human_Host_Table.parseBioSampleXML(lBiosampleElement));
+                    StringBuffer lCollectionTableBuffer = myCollection_Table.parseBioSampleXML(lBiosampleElement);
+                    lBuffer.append(lCollectionTableBuffer);
+                    lBuffer.append(mySubmitter_Table.parseBioSampleXML(lBiosampleElement));
+                    lBuffer.append(myOwner_Table.parseBioSampleXML(lBiosampleElement,
+                            mySubmitter_Table,myCollection_Owner_Table,lCollectionTableBuffer));
+                    lBuffer.append(myCross_Reference_Table.parseBioSampleXML(lBiosampleElement));
+                    lBuffer.append(myStudy_Method_Table.parseBioSampleXML(lBiosampleElement));
 
-        try {
-            fis = new FileInputStream(fileName);
-            xsr = XMLInputFactory.newInstance().createXMLStreamReader(fis);
-
-            TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer t = tf.newTransformer();
-
-            while (xsr.hasNext()) {
-                int eventCode = xsr.next();
-
-                if ((XMLStreamConstants.START_ELEMENT == eventCode)
-                    && (xsr.getLocalName().equalsIgnoreCase(BIOSAMPLE_ELEMENT))) {
-                        result = new DOMResult();
-                        t.transform(new StAXSource(xsr), result);
-                        Element lBioSampleElement = (Element) result.getNode();
-
-                        lBuffer.append(mySample_Table.parseBioSampleXML(lBiosampleElement));
-                        lBuffer.append(myHuman_Host_Table.parseBioSampleXML(lBiosampleElement));
-                        lBuffer.append(myNon_Human_Host_Table.parseBioSampleXML(lBiosampleElement));
-                        StringBuffer lCollectionTableBuffer = myCollection_Table.parseBioSampleXML(lBiosampleElement);
-                        lBuffer.append(lCollectionTableBuffer);
-                        lBuffer.append(mySubmitter_Table.parseBioSampleXML(lBiosampleElement));
-                        lBuffer.append(myOwner_Table.parseBioSampleXML(lBiosampleElement,
-                                mySubmitter_Table,myCollection_Owner_Table,lCollectionTableBuffer));
-                        lBuffer.append(myCross_Reference_Table.parseBioSampleXML(lBiosampleElement));
-                        lBuffer.append(myStudy_Method_Table.parseBioSampleXML(lBiosampleElement));
-
-                        try {
-                            myStatement.execute(lBuffer.toString());
-                        } catch (SQLException sqle) {
-                            sqle.printStackTrace(System.out);
-                        }
-                        lBuffer.setLength(0);                    
+                    try {
+                        myStatement.execute(lBuffer.toString());
+                    } catch (SQLException sqle) {
+                        sqle.printStackTrace(System.out);
+                    }
+                    lBuffer.setLength(0);
                 }
-            }            
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (XMLStreamException e) {
-            e.printStackTrace();
-        } catch (TransformerConfigurationException e) {
-            e.printStackTrace();
-        } catch (TransformerException e) {
-            e.printStackTrace();
+            }
         }
     }
     
-    private void parseBioProjectDebug(String fileName) {
-        String PACKAGE_ELEMENT = "Package";
-        FileInputStream fis;
-        XMLStreamReader xsr;
-
-        try {
-            fis = new FileInputStream(fileName);
-            xsr = XMLInputFactory.newInstance().createXMLStreamReader(fis);
+    private void parseBioProjectDebug(){
+        //get the root element
+        if(myDocument != null) {
+            Element lRootElement = myDocument.getDocumentElement();
+            NodeList lNodeList = lRootElement.getElementsByTagName("Package");
             StringBuffer lBuffer = new StringBuffer();
-            TransformerFactory tf = TransformerFactory.newInstance();
-            Transformer t = tf.newTransformer();
-
-            while (xsr.hasNext()) {
-                int eventCode = xsr.next();
-
-                if ((XMLStreamConstants.START_ELEMENT == eventCode)
-                    && (xsr.getLocalName().equalsIgnoreCase(PACKAGE_ELEMENT))) {
-                        DOMResult result = new DOMResult();
-                        t.transform(new StAXSource(xsr), result);
-                        Element lPackageElement = (Element) result.getNode();
-
-                        lBuffer.append(myProject_Table.parseBioProjectXML(lPackageElement));
-                        lBuffer.append(myOwner_Table.parseBioProjectXML(lPackageElement));
-                        lBuffer.append(myProject_Publication_Table.parseBioProjectXML(lPackageElement));                    
-
-                        try {
-                            myStatement.execute(lBuffer.toString());
-                        } catch (SQLException sqle) {
-                            sqle.printStackTrace(System.out);
-                        }
-                        lBuffer.setLength(0);                    
+            if(lNodeList != null && lNodeList.getLength() > 0) {
+                for(int i = 0, n = lNodeList.getLength(); i < n;i++) {
+                    System.out.println("Parsing Node "+i);
+                    Element lPackageElement = (Element)lNodeList.item(i);
+                    lBuffer.append(myProject_Table.parseBioProjectXML(lPackageElement));
+                    lBuffer.append(myOwner_Table.parseBioProjectXML(lPackageElement));
+                    lBuffer.append(myProject_Publication_Table.parseBioProjectXML(lPackageElement));
+                    try {
+                        myStatement.execute(lBuffer.toString());
+                    } catch (SQLException sqle) {
+                        sqle.printStackTrace(System.out);
+                    }
+                    lBuffer.setLength(0);
                 }
-            }            
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (XMLStreamException e) {
-            e.printStackTrace();
-        } catch (TransformerConfigurationException e) {
-            e.printStackTrace();
-        } catch (TransformerException e) {
-            e.printStackTrace();
+            }
         }
     }
     
@@ -226,6 +198,9 @@ public class BioSampleParser {
         System.out.println(myCollection_Table.toCreateString());
     }
     
+    public void clearDocument() {
+    myDocument=null;
+    }
     /**
      * Create all the tables via the JDBC Connection.
      */
@@ -470,22 +445,20 @@ public class BioSampleParser {
                 BioSampleParser lParser = new BioSampleParser(lGeoMapper,lProp);
                 lParser.connectToDatabase();
                 lParser.deleteTables();
-                System.out.println("Number of biosample files: " + Integer.toString(lNumOfBioSampleFiles));
-                System.out.println("Number of bioproject files: " + Integer.toString(lNumOfBioProjectFiles));
-                
                 for(int i=0;i<lNumOfBioSampleFiles;i++) {
                     String lFileName = lBioSampleFileName +i+".xml";
                     System.out.println("Parsing "+lFileName);
                     lParser.parseXmlFile(lFileName);
-                    lParser.parseBioSampleDebug(lFileName);
+                    lParser.parseBioSampleDebug();
+            lParser.clearDocument();
                 }
-
                 for(int i=0;i<lNumOfBioProjectFiles;i++) {
                     String lFileName = lBioProjectFileName +i+".xml";
                     System.out.println("Parsing "+lFileName);
-                    lParser.parseBioProjectDebug(lFileName);
+                    lParser.parseXmlFile(lFileName);
+                    lParser.parseBioProjectDebug();
+            lParser.clearDocument();
                 }
-
                 lParser.closeConnectionToDatabase();
                 lParser.connectToDatabase();
                 lParser.parseIdMap(lBioProjectBioSampleIDMapping);

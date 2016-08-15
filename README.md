@@ -25,6 +25,12 @@ Software requirements
 
 Note: The system was tested under the software with version provided in parentheses. Other versions may or may not work.
 
+Processing time
+--------------------
+We have observed data download, data processing, and database import times of between 7 hours and 8 hours on a dual-processor (Intel Xeon E7-2830 2.13 GhZ) machine with 16 gigabytes of memory. 
+
+On machines with more memory, it may be more efficient to split the initial Biosample and Bioproject XML files into larger segments. This setting can be changed in the `scripts/DataSplit.sh` script.
+
 Project organization
 ====================
 
