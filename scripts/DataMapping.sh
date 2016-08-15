@@ -16,7 +16,7 @@ python ${scriptpath}/mapBioSampleBioProjectIDs.py "\"${idMapDir}/\"" "\"${script
 awk -v scriptpath="\"${scriptpath}\"" -f ${scriptpath}/getIds.awk ${biosamplefilepath}/biosample_set.xml > ${scriptpath}/idlist.out
 sort -nu ${scriptpath}/BioSampleIDs.out > ${scriptpath}/sorted_BioSampleIDs.out
 sort -nu ${scriptpath}/idlist.out > ${scriptpath}/sorted_idlist.out
-diff ${scriptpath}/sorted_BioSampleIDs.out ${scriptpath}/sorted_idlist.out > ${scriptpath}/diff_IDs.out
+diff ${scriptpath}/sorted_BioSampleIDs.out ${scriptpath}/sorted_idlist.out > ${scriptpath}/diff_IDs.out || true
 grep "<" ${scriptpath}/diff_IDs.out | awk '{print "array[\"BioSample"$2"\"]=4;";}' > ${scriptpath}/BADIDs.out
 cat ${scriptpath}/BEGIN ${scriptpath}/BADIDs.out ${scriptpath}/END > ${scriptpath}/filter.awk
 awk -f ${scriptpath}/filter.awk ${idMapDir}/MappedIDs.out > ${idMapDir}/FilteredMappedIDs.out
