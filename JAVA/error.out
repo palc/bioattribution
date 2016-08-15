@@ -1,0 +1,13 @@
+Connected.
+Number of biosample files: 5
+Number of bioproject files: 1
+Parsing /home/cgaray/biosample/FtpBioSample0.xml
+Exception in thread "main" java.lang.OutOfMemoryError: Java heap space
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:848)
+	at com.sun.org.apache.xerces.internal.parsers.XML11Configuration.parse(XML11Configuration.java:777)
+	at com.sun.org.apache.xerces.internal.parsers.XMLParser.parse(XMLParser.java:141)
+	at com.sun.org.apache.xerces.internal.parsers.DOMParser.parse(DOMParser.java:243)
+	at com.sun.org.apache.xerces.internal.jaxp.DocumentBuilderImpl.parse(DocumentBuilderImpl.java:338)
+	at javax.xml.parsers.DocumentBuilder.parse(DocumentBuilder.java:177)
+	at biosampleparser.BioSampleParser.parseXmlFile(BioSampleParser.java:105)
+	at biosampleparser.BioSampleParser.main(BioSampleParser.java:453)
