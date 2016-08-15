@@ -450,7 +450,7 @@ public class BioSampleParser {
                     System.out.println("Parsing "+lFileName);
                     lParser.parseXmlFile(lFileName);
                     lParser.parseBioSampleDebug();
-		    lParser.clearDocument();
+	                lParser.clearDocument();
                 }
                 for(int i=0;i<lNumOfBioProjectFiles;i++) {
                     String lFileName = lBioProjectFileName +i+".xml";
