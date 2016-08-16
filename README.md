@@ -180,4 +180,18 @@ Replace `<DATABASE_NAME>` with the name of your scheme, which defaults to `bioat
 
 In order to install the LabKey module, move the `datatools` directory to the `externalModules` folder of your labkey installation. For example, if LabKey is installed at `/usr/local/labkey`, `datatools` would be located at `/usr/local/labkey/externalModules/labkey`.
 
+Google Maps API Key
+===================
+
+The mapping functionality is provided by Google Maps - this requires an API key.
+While one is provided for demonstration purposes, we suggest that users request
+an API from Google using the instructions at https://developers.google.com/maps/documentation/javascript/get-api-key
+
+Once you have acquired a key, please edit the following line in geodata.html in the views folder,
+replacing the demonstration key with your own.
+
+```
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyDlqXBOxdhMqsx1t3pSydTLKQ3Cmg6sEgM"></script>
+```
+
 ©2015 The MITRE Corporation. ALL RIGHTS RESERVED. Approved for Public Release; Distribution Unlimited. Case Number 15-0792.
